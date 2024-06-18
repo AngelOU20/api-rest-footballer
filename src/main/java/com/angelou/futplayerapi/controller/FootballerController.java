@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.List;import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -198,7 +198,28 @@ public class FootballerController {
 
     @GetMapping("footballers")
     @ResponseStatus(HttpStatus.OK)
-    public List<Footballer> getAll() {
-        return footballerService.findAll();
+    public ResponseEntity<?> getAll() {
+        try {
+            List<Footballer> footballers = footballerService.findAll();
+            List<FootballerDto> footballerDtos = footballers.stream()
+                    .map(footballer -> FootballerDto.builder()
+                            .id(footballer.getId())
+                            .name(footballer.getName())
+                            .lastname(footballer.getLastname())
+                            .features(footballer.getFeatures())
+                            .biography(footballer.getBiography())
+                            .birthdate(footballer.getBirthdate())
+                            .deathdate(footballer.getDeathdate())
+                            .position(footballer.getPosition())
+                            .build())
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(footballerDtos, HttpStatus.OK);
+        } catch (DataAccessException exDt) {
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .message(exDt.getMessage())
+                    .object(null)
+                    .build(),
+                    HttpStatus.METHOD_NOT_ALLOWED);
+        }
     }
 }
