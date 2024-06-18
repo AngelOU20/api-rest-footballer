@@ -25,7 +25,7 @@ public class FootballerController {
     @PostMapping("footballer")
 //    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create(@RequestBody FootballerDto footballerDto) {
-        Footballer footballerSave = null;
+        Footballer footballerSave;
         try {
             footballerSave = footballerService.save(footballerDto);
             footballerDto = FootballerDto.builder()
@@ -103,7 +103,8 @@ public class FootballerController {
 
     @PutMapping("footballer/{id}")
     public ResponseEntity<?> update(@PathVariable Integer id, @RequestBody FootballerDto footballerDto) {
-        Footballer footballerUpdated = null;
+        Footballer footballerUpdated;
+
         try {
 //            Footballer footballerFound = footballerService.findById(id);
 //            footballerFound == null
