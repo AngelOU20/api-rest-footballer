@@ -9,7 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -31,6 +32,8 @@ public class FootballerController {
                     .id(footballerSave.getId())
                     .name(footballerSave.getName())
                     .lastname(footballerSave.getLastname())
+                    .commonName(footballerSave.getCommonName())
+                    .nickname(footballerSave.getNickname())
                     .features(footballerSave.getFeatures())
                     .biography(footballerSave.getBiography())
                     .birthdate(footballerSave.getBirthdate())
@@ -118,6 +121,8 @@ public class FootballerController {
                     .id(footballerUpdated.getId())
                     .name(footballerUpdated.getName())
                     .lastname(footballerUpdated.getLastname())
+                    .commonName(footballerUpdated.getCommonName())
+                    .nickname(footballerUpdated.getNickname())
                     .features(footballerUpdated.getFeatures())
                     .biography(footballerUpdated.getBiography())
                     .birthdate(footballerUpdated.getBirthdate())
@@ -186,6 +191,8 @@ public class FootballerController {
                         .id(footballer.getId())
                         .name(footballer.getName())
                         .lastname(footballer.getLastname())
+                        .nickname(footballer.getNickname())
+                        .commonName(footballer.getCommonName())
                         .features(footballer.getFeatures())
                         .biography(footballer.getBiography())
                         .birthdate(footballer.getBirthdate())
@@ -201,11 +208,22 @@ public class FootballerController {
     public ResponseEntity<?> getAll() {
         try {
             List<Footballer> footballers = footballerService.findAll();
+
+            if (footballers == null || footballers.isEmpty()) {
+                return new ResponseEntity<>(MessageResponse.builder()
+                        .message("No hay registros!")
+                        .object(null)
+                        .build(),
+                        HttpStatus.OK);
+            }
+
             List<FootballerDto> footballerDtos = footballers.stream()
                     .map(footballer -> FootballerDto.builder()
                             .id(footballer.getId())
                             .name(footballer.getName())
                             .lastname(footballer.getLastname())
+                            .commonName(footballer.getCommonName())
+                            .nickname(footballer.getNickname())
                             .features(footballer.getFeatures())
                             .biography(footballer.getBiography())
                             .birthdate(footballer.getBirthdate())
@@ -213,7 +231,9 @@ public class FootballerController {
                             .position(footballer.getPosition())
                             .build())
                     .collect(Collectors.toList());
+
             return new ResponseEntity<>(footballerDtos, HttpStatus.OK);
+
         } catch (DataAccessException exDt) {
             return new ResponseEntity<>(MessageResponse.builder()
                     .message(exDt.getMessage())
