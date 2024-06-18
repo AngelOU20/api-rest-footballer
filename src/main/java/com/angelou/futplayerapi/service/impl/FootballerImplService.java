@@ -23,6 +23,8 @@ public class FootballerImplService implements IFootballerService {
                 .id(footballerDto.getId())
                 .name(footballerDto.getName())
                 .lastname(footballerDto.getLastname())
+                .commonName(footballerDto.getCommonName())
+                .nickname(footballerDto.getNickname())
                 .features(footballerDto.getFeatures())
                 .biography(footballerDto.getBiography())
                 .birthdate(footballerDto.getBirthdate())
