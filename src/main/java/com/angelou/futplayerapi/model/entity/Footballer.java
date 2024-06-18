@@ -25,6 +25,12 @@ public class Footballer {
     @Column(name = "lastname", nullable = false)
     private String lastname;
 
+    @Column(name = "common_name")
+    private String commonName;
+
+    @Column(name = "nickname")
+    private String nickname;
+
     @Column(name = "features")
     private String features;
 
