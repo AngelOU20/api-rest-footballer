@@ -1,10 +1,7 @@
 package com.angelou.futplayerapi.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.Date;
 
@@ -12,6 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 @Entity
 @Table(name = "footballer")
 public class Footballer {
@@ -19,7 +17,7 @@ public class Footballer {
     @Id
     @Column(name = "footballer_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Integer id;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -30,9 +28,14 @@ public class Footballer {
     @Column(name = "features")
     private String features;
 
+    @Column(name = "biography", length = 1000) // Adjust the length as needed
+    private String biography;
+
+    @Temporal(TemporalType.DATE)
     @Column(name = "birthdate")
     private Date birthdate;
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "deathdate")
     private Date deathdate;
 
@@ -43,6 +46,17 @@ public class Footballer {
     private Date lastUpdatedDate;
 
     @ManyToOne
-    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    @JoinColumn(name = "position_id", referencedColumnName = "position_id")
     private Position position;
+
+    @PrePersist
+    protected void onCreate(){
+        this.registrationDate = new Date();
+        this.lastUpdatedDate = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate(){
+        this.lastUpdatedDate = new Date();
+    }
 }
