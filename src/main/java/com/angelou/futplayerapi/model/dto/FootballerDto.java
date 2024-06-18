@@ -17,6 +17,10 @@ public class FootballerDto implements Serializable {
 
     private String lastname;
 
+    private String commonName;
+
+    private String nickname;
+
     private String features;
 
     private String biography;
